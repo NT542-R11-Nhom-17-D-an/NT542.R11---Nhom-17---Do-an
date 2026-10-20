@@ -1,0 +1,7 @@
+
+
+DB_HOST = "localhost"
+DB_PORT = 5432
+
+AWS_SECRET_ACCESS_KEY = "AKIAIOSFODNN7EXAMPLE" 
+GITHUB_PAT_TOKEN = "ghp_1234567890abcdefghijklmnopqrstuvwxyzABCD"
