@@ -1,0 +1,16 @@
+name: Dedicated Application Build Pipeline
+on:
+  push:
+    branches: [ "main" ]
+permissions:
+  contents: read
+jobs:
+  compile-and-package:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Source Code
+        uses: actions/checkout@v4
+      - name: Build Artifact Only
+        run: |
+          mkdir -p dist
+          echo "Build version 1.0.0" > dist/build.info
