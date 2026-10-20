@@ -1,11 +1,9 @@
-
 name: CIS 1.5 & 2.1 Security Pipeline
-
 on:
   push:
-    branches: ["main"]
+    branches: [ "main" ]
   pull_request:
-    branches: ["main"]
+    branches: [ "main" ]
 
 permissions:
   contents: read
@@ -16,35 +14,33 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v6
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
-
       - name: Run Gitleaks (CIS 1.5.1)
-        uses: gitleaks/gitleaks-action@v3
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          wget -q https://github.com/gitleaks/gitleaks/releases/download/v8.18.4/gitleaks_8.18.4_linux_x64.tar.gz
+          tar -xzf gitleaks_8.18.4_linux_x64.tar.gz
+          ./gitleaks detect --source . --verbose
 
   ci-pipeline-scanner:
     name: Actionlint CI Scanner
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v6
-
-      - name: Run Actionlint (CIS 1.5.2)
-        uses: reviewdog/action-actionlint@v1
+        uses: actions/checkout@v4
+      - name: Run Actionlint CI Scanner (CIS 1.5.2)
+        uses: rhysd/actionlint@v1.7.1
 
   trivy-comprehensive-scanner:
     name: Trivy Security Scanner
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v6
-
-      - name: Run Trivy (CIS 1.5.3 - 1.5.6)
-        uses: aquasecurity/trivy-action@v0.36.0
+        uses: actions/checkout@v4
+      - name: Run Trivy Vulnerability, IaC & License Scanner (CIS 1.5.3 - 1.5.6)
+        uses: aquasecurity/trivy-action@master
         with:
-          scan-type: "fs"
-          scanners: "vuln,misconfig,secret,license"
-          scan-ref: "."
+          scan-type: 'fs'
+          scanners: 'vuln,misconfig,secret,license'
+          scan-ref: '.'
